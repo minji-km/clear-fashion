@@ -108,7 +108,7 @@ console.log(sortedProducts);
 
 function sortByDate(a, b) {
   return new Date(b.released) - new Date(a.released);
-}
+} 
 let sortedProductsByDate = marketplace.sort(sortByDate);
 console.log(sortedProductsByDate);
 
@@ -117,9 +117,22 @@ console.log(sortedProductsByDate);
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
 
+const filteredList = marketplace.filter(product => product.price >= 50 && product.price <= 100);
+console.log(filteredList);
+
 // 🎯 TODO 7: Average price
 // 1. Determine the average price of the marketplace
 // 2. Log the average
+
+let totalPrice = 0;
+
+for (let i = 0; i < numberOfProducts; i++) {
+  totalPrice += marketplace[i].price;
+}
+
+const avgPrice = totalPrice / numberOfProducts;
+console.log(`The average price of the marketplace is ${avgPrice}€`);
+
 
 /**
  * 🏎
@@ -143,6 +156,19 @@ console.log(sortedProductsByDate);
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
+
+const brands = [];
+
+for (let i = 0; i < brandsNames; i++) {
+  const brand = brandsNames[i];
+  const productsByBrand = marketplace.filter(product => product.brand === brand);
+  brands[brand] = productsByBrand;
+}
+console.log(brands);
+for (const brand in brands) {
+  console.log(`Number of products for ${brand}: ${brands[brand].length}`);
+}
+
 
 // 🎯 TODO 9: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
