@@ -19,6 +19,9 @@ const MY_FAVORITE_BRANDS = [
   }
 ];
 
+console.table(MY_FAVORITE_BRANDS);
+console.log(MY_FAVORITE_BRANDS[0]);
+
 const CHEAPEST_TSHIRTS = [
   {
     'name': 'Faguo Cheapest',
@@ -34,8 +37,8 @@ const CHEAPEST_TSHIRTS = [
   }
 ];
 
-console.table(MY_FAVORITE_BRANDS);
-console.log(MY_FAVORITE_BRANDS[0]);
+console.log(CHEAPEST_TSHIRTS);
+
 
 /**
  * 🌱
