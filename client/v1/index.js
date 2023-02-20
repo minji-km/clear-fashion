@@ -174,9 +174,22 @@ for (let brand in brands) {
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
 
+for (let brand of brandsNames) {
+  brands[brand].sort((a, b) => b.price - a.price);
+}
+console.log(brands);
+
+
 // 🎯 TODO 10: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
+
+for (const brand in brands) {
+  brands[brand].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  console.log(`Products for ${brand} sorted by date from old to recent:`);
+  console.log(brands[brand]);
+}
 
 /**
  * 💶
