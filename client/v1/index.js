@@ -106,6 +106,13 @@ console.log(sortedProducts);
 // 2. Create a variable and assign it the list of products by date from recent to old
 // 3. Log the variable
 
+function sortByDate(a, b) {
+  return new Date(b.released) - new Date(a.released);
+}
+let sortedProductsByDate = marketplace.sort(sortByDate);
+console.log(sortedProductsByDate);
+
+
 // 🎯 TODO 6: Filter a specific price range
 // 1. Filter the list of products between 50€ and 100€
 // 2. Log the list
