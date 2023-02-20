@@ -202,6 +202,20 @@ for (const brand in brands) {
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
 
+const p90Prices = {};
+
+for (const brand in brands) {
+  const prices = brands[brand].map(product => product.price);
+  prices.sort((a, b) => a - b);
+  const p90Index = Math.floor(0.9 * prices.length);
+  const p90Value = prices[p90Index];
+  p90Prices[brand] = p90Value;
+}
+
+console.log(p90Prices);
+
+
+
 /**
  * 🧥
  * Cool for your effort.
@@ -393,6 +407,8 @@ const COTELE_PARIS = [
 // 🎯 TODO 1: New released products
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
+
+
 
 // 🎯 TODO 2: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
