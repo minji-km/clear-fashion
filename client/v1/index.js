@@ -22,6 +22,19 @@ const MY_FAVORITE_BRANDS = [
 console.table(MY_FAVORITE_BRANDS);
 console.log(MY_FAVORITE_BRANDS[0]);
 
+/**
+ * 🌱
+ * Let's go with a very very simple first todo
+ * Keep pushing
+ * 🌱
+ */
+
+// 🎯 TODO 1: The cheapest t-shirt
+// 0. I have 3 favorite brands stored in MY_FAVORITE_BRANDS variable
+// 1. Create a new variable and assign it the link of the cheapest t-shirt
+// I can find on these e-shops
+// 2. Log the variable
+
 const CHEAPEST_TSHIRTS = [
   {
     'name': 'Faguo Cheapest',
@@ -41,19 +54,6 @@ console.log(CHEAPEST_TSHIRTS);
 
 
 /**
- * 🌱
- * Let's go with a very very simple first todo
- * Keep pushing
- * 🌱
- */
-
-// 🎯 TODO 1: The cheapest t-shirt
-// 0. I have 3 favorite brands stored in MY_FAVORITE_BRANDS variable
-// 1. Create a new variable and assign it the link of the cheapest t-shirt
-// I can find on these e-shops
-// 2. Log the variable
-
-/**
  * 👕
  * Easy 😁?
  * Now we manipulate the variable `marketplace`
@@ -65,6 +65,9 @@ console.log(CHEAPEST_TSHIRTS);
 // 🎯 TODO 2: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
+
+const numberOfProducts = marketplace.length;
+console.log(numberOfProducts);
 
 // 🎯 TODO 3: Brands name
 // 1. Create a variable and assign it the list of brands name only
