@@ -467,7 +467,7 @@ let jacket = blueJacket;
 jacket.favorite = true;
 
 // 1. Log `blueJacket` and `jacket` variables
-// 2. What do you notice?
+// 2. What do you notice? jacket has the favorite attribue but not blue jacket
 
 // we make a new assignment again
 blueJacket = {
