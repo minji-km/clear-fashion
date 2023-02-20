@@ -408,11 +408,25 @@ const COTELE_PARIS = [
 // // 1. Log if we have new products only (true or false)
 // // A new product is a product `released` less than 2 weeks.
 
+const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString();
 
+const isNewProduct = (product) => {
+  const releaseDate = new Date(product.released);
+  return releaseDate > twoWeeksAgo;
+};
+
+const hasNewProducts = COTELE_PARIS.some(isNewProduct);
+
+console.log(hasNewProducts);
 
 // 🎯 TODO 2: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
+
+const maxPrice = Math.max(...COTELE_PARIS.map(product => product.price));
+const isReasonable = maxPrice < 100;
+console.log(maxPrice);
+console.log(isReasonable);
 
 // 🎯 TODO 3: Find a specific product
 // 1. Find the product with the uuid `2b9a47e3-ed73-52f6-8b91-379e9c8e526c`
