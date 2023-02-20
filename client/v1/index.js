@@ -19,6 +19,21 @@ const MY_FAVORITE_BRANDS = [
   }
 ];
 
+const CHEAPEST_TSHIRTS = [
+  {
+    'name': 'Faguo Cheapest',
+    'url': 'https://www.faguo-store.com/fr/vetements/7606-arcy-t-shirt-en-coton-recycle-kaki.html'
+  },
+  {
+    'name': 'Loom Cheapest',
+    'url': 'https://www.loom.fr/collections/t-shirts-debardeurs-femme/products/le-t-shirt-femme'
+  },
+  {
+    'name': 'Ecclo Cheapest',
+    'url': 'https://ecclo.fr/products/t-shirt-noir-boycott-world-cup-2022'
+  }
+];
+
 console.table(MY_FAVORITE_BRANDS);
 console.log(MY_FAVORITE_BRANDS[0]);
 
