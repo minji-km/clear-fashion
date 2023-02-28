@@ -462,7 +462,7 @@ let blueJacket = {
 
 // we make a copy of `blueJacket` to `jacket` variable
 // and set a new property `favorite` to true
-let jacket = blueJacket;
+const jacket = blueJacket;
 
 jacket.favorite = true;
 
@@ -493,3 +493,6 @@ blueJacket = {
 // 🎯 LAST TODO: Save in localStorage
 // 1. Save MY_FAVORITE_BRANDS in the localStorage
 // 2. log the localStorage
+
+localStorage.setItem('MY_FAVORITE_BRANDS', JSON.stringify(MY_FAVORITE_BRANDS));
+console.log(localStorage)
