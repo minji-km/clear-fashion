@@ -32,10 +32,12 @@ const spanNbProducts = document.querySelector('#nbProducts');
  * @param {Array} result - products to display
  * @param {Object} meta - pagination meta info
  */
+
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
-  currentPagination = meta;
+  currentPagination = {...meta, pageCount: Math.ceil(meta.count / selectShow.value)};
 };
+
 
 /**
  * Fetch products from api
@@ -61,6 +63,7 @@ const fetchProducts = async (page = 1, size = 12) => {
     return {currentProducts, currentPagination};
   }
 };
+
 
 /**
  * Render list of products
@@ -134,9 +137,14 @@ selectShow.addEventListener('change', async (event) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
-
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
 
+selectPage.addEventListener('change', async (event) => {
+  const products = await fetchProducts(parseInt(event.target.value), selectShow.value);
+
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
 
