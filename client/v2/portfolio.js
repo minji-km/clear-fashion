@@ -139,22 +139,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   render(currentProducts, currentPagination);
 });
 
-// FEATURE 1 
-// Select the page of products to display
-selectPage.addEventListener('change', async (event) => {
-  const products = await fetchProducts(parseInt(event.target.value));
-
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
-});
-
-// FEATURE 2
-// Select products by brand
-const selectBrand = document.querySelector('#brand-select');
-selectBrand.addEventListener('change', async (event) => {
-  const products = await fetchProducts(1, 12, event.target.value);
-
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
-});
 
