@@ -149,17 +149,3 @@ selectPage.addEventListener('change', async (event) => {
 });
 
 
-
-function populateBrands(products) {
-  const brandSelect = document.getElementById('brand-select');
-  const brands = new Set(products.map(product => product.brand));
-  brands.forEach(brand => {
-    const option = document.createElement('option');
-    option.text = brand;
-    option.value = brand;
-    brandSelect.add(option);
-  });
-}
-
-populateBrands(products);
-
