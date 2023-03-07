@@ -26,6 +26,7 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const selectBrand = document.querySelector('#brand-select');
 
 /**
  * Set global value
@@ -35,9 +36,11 @@ const spanNbProducts = document.querySelector('#nbProducts');
 
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
-  currentPagination = {...meta, pageCount: Math.ceil(meta.count / selectShow.value)};
+  currentPagination = {
+    ...meta,
+    pageCount: Math.ceil(meta.count / selectShow.value),
+  };
 };
-
 
 /**
  * Fetch products from api
@@ -64,6 +67,26 @@ const fetchProducts = async (page = 1, size = 12) => {
   }
 };
 
+// to make filter brand fetch by brand
+
+const fetchProductsByBrand = async (page = 1, size = 12, brand) => {
+  try {
+    let string="";
+    if(brand !="all"){
+      string=`&brand=${brand}`;
+    }
+    const response = await fetch(`https://clear-fashion-api.vercel.app?page=${page}&size=${size}`+string);
+    const body = await response.json();
+    if (body.success !== true) {
+      console.error(body);
+      return {currentProducts, currentPagination};
+    }
+    return body.data;
+  } catch (error) {
+    console.error(error);
+    return {currentProducts, currentPagination};
+  }
+};
 
 /**
  * Render list of products
@@ -88,6 +111,17 @@ const renderProducts = products => {
   fragment.appendChild(div);
   sectionProducts.innerHTML = '<h2>Products</h2>';
   sectionProducts.appendChild(fragment);
+
+  const brands = [...new Set(products.map(product => product.brand))];
+  const brandSelect = document.getElementById('brand-select');
+  brands.forEach(brand => {
+    if (!brandSelect.querySelector(`option[value="${brand}"]`)) {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      brandSelect.appendChild(option);
+    }
+  });
 };
 
 /**
@@ -111,7 +145,6 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
   const {count} = pagination;
-
   spanNbProducts.innerHTML = count;
 };
 
@@ -128,9 +161,27 @@ const render = (products, pagination) => {
 /**
  * Select the number of products to display
  */
-selectShow.addEventListener('change', async (event) => {
-  const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value));
 
+selectShow.addEventListener('change', async (event) => {
+  const size = parseInt(event.target.value);
+  const products = await fetchProducts(currentPagination.currentPage, size, selectBrand.value);
+  const {meta} = await fetchProducts(1, 1, selectBrand.value);
+  setCurrentProducts({result: products, meta});
+  render(currentProducts, currentPagination);
+});
+
+// select page to navigate
+
+selectPage.addEventListener('change', async (event) => {
+  const products = await fetchProducts(parseInt(event.target.value), selectShow.value, selectBrand.value);
+  setCurrentProducts(products);
+  render(currentProducts, currentPagination);
+});
+
+// FEATURE 2 filter by brand
+
+selectBrand.addEventListener('change', async(event) => {
+  const products = await fetchProductsByBrand(currentPagination.currentPage, selectShow.value, event.target.value.toLowerCase());
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
@@ -140,12 +191,3 @@ document.addEventListener('DOMContentLoaded', async () => {
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
-
-selectPage.addEventListener('change', async (event) => {
-  const products = await fetchProducts(parseInt(event.target.value), selectShow.value);
-
-  setCurrentProducts(products);
-  render(currentProducts, currentPagination);
-});
-
-
