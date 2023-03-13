@@ -68,7 +68,7 @@ const fetchProducts = async (page = 1, size = 12, brand = '') => {
 
 // to make filter brand fetch by brand
 
-const fetchProductsByBrand = async (page = 1, size = 12, brand) => {
+const fetchProductsByBrand = async (page = 1, size = 12, brand = '') => {
   try {
     let string="";
     if(brand !="all"){
@@ -84,6 +84,30 @@ const fetchProductsByBrand = async (page = 1, size = 12, brand) => {
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
+  }
+};
+
+// to make filter price under 50
+
+const fetchProductsByPrice = async () => {
+  try {
+    const response = await fetch('https://clear-fashion-api.vercel.app/products');
+    const body = await response.json();
+    if (body.success !== true) {
+      console.error(body);
+      return [];
+    }
+
+    const filteredProducts = body.data.filter(product => product.price <= 50);
+    if (filteredProducts.length === 0) {
+      console.warn('No products found within the specified price range.');
+      return [];
+    }
+
+    return filteredProducts;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 };
 
@@ -136,6 +160,9 @@ const renderProducts = products => {
     brandSelect.insertBefore(allOption, brandSelect.firstChild);
   }
 };
+
+
+
 
 /**
  * Render page selector
@@ -205,3 +232,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+const filterprice = document.querySelector('#filter-price');
+filterprice.addEventListener('click', async () => {
+  try {
+    const products = await fetchProductsByPrice(currentPagination.currentPage, selectShow.value, selectBrand.value);
+    renderProducts(products);
+  } catch (error) {
+    console.error(error);
+  }
+  setCurrentProducts(products);
+  render(currentProducts);
+});
