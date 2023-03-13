@@ -87,29 +87,6 @@ const fetchProductsByBrand = async (page = 1, size = 12, brand = '') => {
   }
 };
 
-// to make filter price under 50
-
-const fetchProductsByPrice = async () => {
-  try {
-    const response = await fetch('https://clear-fashion-api.vercel.app/products');
-    const body = await response.json();
-    if (body.success !== true) {
-      console.error(body);
-      return [];
-    }
-
-    const filteredProducts = body.data.filter(product => product.price <= 50);
-    if (filteredProducts.length === 0) {
-      console.warn('No products found within the specified price range.');
-      return [];
-    }
-
-    return filteredProducts;
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
-};
 
 /**
  * Render list of products
@@ -137,14 +114,7 @@ const renderProducts = products => {
 
   const brands = [...new Set(products.map(product => product.brand))];
   const brandSelect = document.getElementById('brand-select');
-  brands.forEach(brand => {
-    if (!brandSelect.querySelector(`option[value="${brand}"]`)) {
-      const option = document.createElement('option');
-      option.value = brand;
-      option.textContent = brand;
-      brandSelect.appendChild(option);
-    }
-  });
+  
   let allOptionExists = false;
   for (let i = 0; i < brandSelect.options.length; i++) {
     if (brandSelect.options[i].value === 'all') {
@@ -156,13 +126,19 @@ const renderProducts = products => {
   if (!allOptionExists) {
     const allOption = document.createElement('option');
     allOption.value = 'all';
-    allOption.text = 'All';
+    allOption.text = 'all';
     brandSelect.insertBefore(allOption, brandSelect.firstChild);
   }
+
+  brands.forEach(brand => {
+    if (!brandSelect.querySelector(`option[value="${brand}"]`)) {
+      const option = document.createElement('option');
+      option.value = brand;
+      option.textContent = brand;
+      brandSelect.appendChild(option);
+    }
+  });
 };
-
-
-
 
 /**
  * Render page selector
@@ -231,15 +207,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   render(currentProducts, currentPagination);
 });
 
+// filter price
 
-const filterprice = document.querySelector('#filter-price');
-filterprice.addEventListener('click', async () => {
-  try {
-    const products = await fetchProductsByPrice(currentPagination.currentPage, selectShow.value, selectBrand.value);
-    renderProducts(products);
-  } catch (error) {
-    console.error(error);
-  }
-  setCurrentProducts(products);
-  render(currentProducts);
-});
+const filterProductsUnder50 = () => {
+  const filteredProducts = currentProducts.filter(product => product.price < 50);
+  render(filteredProducts, currentPagination);
+};
+
+const filterPriceButton = document.querySelector('#filter-price');
+filterPriceButton.addEventListener('click', filterProductsUnder50);
