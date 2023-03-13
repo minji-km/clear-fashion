@@ -36,36 +36,35 @@ const selectBrand = document.querySelector('#brand-select');
 
 const setCurrentProducts = ({result, meta}) => {
   currentProducts = result;
-  currentPagination = {
-    ...meta,
-    pageCount: Math.ceil(meta.count / selectShow.value),
-  };
+  currentPagination = meta;
 };
 
 /**
  * Fetch products from api
  * @param  {Number}  [page=1] - current page to fetch
  * @param  {Number}  [size=12] - size of the page
+ * @param  {String} [brand=''] - brand to filter by
  * @return {Object}
  */
-const fetchProducts = async (page = 1, size = 12) => {
+const fetchProducts = async (page = 1, size = 12, brand = '') => {
   try {
-    const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
-    );
+    let url = `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`;
+    if (brand!='all') {
+      url += `&brand=${encodeURIComponent(brand)}`;
+    }
+    const response = await fetch(url);
     const body = await response.json();
-
     if (body.success !== true) {
       console.error(body);
       return {currentProducts, currentPagination};
     }
-
     return body.data;
   } catch (error) {
     console.error(error);
     return {currentProducts, currentPagination};
   }
 };
+
 
 // to make filter brand fetch by brand
 
@@ -163,10 +162,8 @@ const render = (products, pagination) => {
  */
 
 selectShow.addEventListener('change', async (event) => {
-  const size = parseInt(event.target.value);
-  const products = await fetchProducts(currentPagination.currentPage, size, selectBrand.value);
-  const {meta} = await fetchProducts(1, 1, selectBrand.value);
-  setCurrentProducts({result: products, meta});
+  const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value), selectBrand.value);
+  setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
 
@@ -186,8 +183,11 @@ selectBrand.addEventListener('change', async(event) => {
   render(currentProducts, currentPagination);
 });
 
+
 document.addEventListener('DOMContentLoaded', async () => {
   const products = await fetchProducts();
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
+
+
