@@ -121,6 +121,20 @@ const renderProducts = products => {
       brandSelect.appendChild(option);
     }
   });
+  let allOptionExists = false;
+  for (let i = 0; i < brandSelect.options.length; i++) {
+    if (brandSelect.options[i].value === 'all') {
+      allOptionExists = true;
+      break;
+    }
+  }
+  
+  if (!allOptionExists) {
+    const allOption = document.createElement('option');
+    allOption.value = 'all';
+    allOption.text = 'All';
+    brandSelect.insertBefore(allOption, brandSelect.firstChild);
+  }
 };
 
 /**
@@ -162,7 +176,7 @@ const render = (products, pagination) => {
  */
 
 selectShow.addEventListener('change', async (event) => {
-  const products = await fetchProducts(currentPagination.currentPage, parseInt(event.target.value), selectBrand.value);
+  const products = await fetchProducts(1, parseInt(event.target.value), selectBrand.value);
   setCurrentProducts(products);
   render(currentProducts, currentPagination);
 });
