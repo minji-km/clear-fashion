@@ -27,6 +27,7 @@ const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const selectBrand = document.querySelector('#brand-select');
+const sortOption = document.querySelector('#sort-select');  
 
 /**
  * Set global value
@@ -165,9 +166,33 @@ const renderIndicators = pagination => {
 };
 
 const render = (products, pagination) => {
+  if (checkbox_price.checked) {
+    products = currentProducts.filter(product => product.price < 50);
+  }
+  if(checkbox_recently.checked){
+    const twoWeeksAgo = Date.now() - 14 * 24 * 60 * 60 * 1000; // timestamp for two weeks ago
+    products = currentProducts.filter(product => new Date(product.released) > twoWeeksAgo);
+  }
+  switch (sortOption.value) {
+    case 'price-asc':
+      products.sort((a, b) => a.price - b.price);
+      break;
+    case 'price-desc':
+      products.sort((a, b) => b.price - a.price);
+      break;
+    case 'date-asc':
+      products.sort((a, b) => new Date(a.released) - new Date(b.released));
+      break;
+    case 'date-desc':
+      products.sort((a, b) => new Date(b.released) - new Date(a.released));
+      break;
+    default:
+      break;
+  }
   renderProducts(products);
   renderPagination(pagination);
   renderIndicators(pagination);
+
 };
 
 /**
@@ -207,12 +232,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   render(currentProducts, currentPagination);
 });
 
-// filter price
+const checkbox_price = document.getElementById('reasonable_price');
+checkbox_price.addEventListener('change', async (event) => {
+  render(currentProducts, currentPagination);
+});
 
-const filterProductsUnder50 = () => {
-  const filteredProducts = currentProducts.filter(product => product.price < 50);
-  render(filteredProducts, currentPagination);
-};
 
-const filterPriceButton = document.querySelector('#filter-price');
-filterPriceButton.addEventListener('click', filterProductsUnder50);
+const checkbox_recently = document.getElementById('recently-released');
+checkbox_recently.addEventListener('change', async (event) => {
+  render(currentProducts, currentPagination);
+});
+
+// SORT
+
+sortOption.addEventListener('change', async (event) => {
+  render(currentProducts, currentPagination);
+});
+
+// Listen for changes to the checkbox state
+// checkbox_price.addEventListener('change', function() {
+//   // If checkbox is checked, enable the filter
+//   if (checkbox_price.checked) {
+//     const filteredProducts = currentProducts.filter(product => product.price < 50);
+//     render(filteredProducts, currentPagination);
+//   } else {
+//     // If checkbox is unchecked, remove the filter
+//     render(currentProducts, currentPagination);
+//   }
+// });
