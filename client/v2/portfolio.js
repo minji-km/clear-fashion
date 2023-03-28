@@ -26,6 +26,13 @@ const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanp50 = document.querySelector('#p50');
+const spanp90 = document.querySelector('#p90');
+const spanp95 = document.querySelector('#p95');
+const spanLastReleased = document.querySelector('#lastreleased');
+const spanNbBrands = document.querySelector('#nbBrands');
+
 const selectBrand = document.querySelector('#brand-select');
 const sortOption = document.querySelector('#sort-select');  
 
@@ -165,6 +172,24 @@ const renderIndicators = pagination => {
   spanNbProducts.innerHTML = count;
 };
 
+const computeIndicators = async() => {
+  const {result:products} = await fetchProducts(1, 222);
+  const twoWeeksAgo = Date.now() - 14 * 24 * 60 * 60 * 1000; // timestamp for two weeks ago
+  spanNbNewProducts.innerHTML = products.filter(product => new Date(product.released) > twoWeeksAgo).length;
+  const productsSorted = products.sort((a, b) => a.price - b.price);
+  if(productsSorted.length%2!=0){
+    spanp50.innerHTML = productsSorted[(productsSorted.length+1)/2].price;
+  }
+  else{
+    spanp50.innerHTML = (productsSorted[productsSorted.length/2].price + productsSorted[productsSorted.length/2+1].price)/2;
+  }
+  spanp90.innerHTML = productsSorted[Math.round(productsSorted.length*0.9)].price;
+  spanp95.innerHTML = productsSorted[Math.round(productsSorted.length*0.95)].price;
+  const productsSortedDate = products.sort((a, b) => new Date(b.released) - new Date(a.released));
+  spanLastReleased.innerHTML = productsSortedDate[0].released;
+};
+
+
 const render = (products, pagination) => {
   if (checkbox_price.checked) {
     products = currentProducts.filter(product => product.price < 50);
@@ -249,14 +274,5 @@ sortOption.addEventListener('change', async (event) => {
   render(currentProducts, currentPagination);
 });
 
-// Listen for changes to the checkbox state
-// checkbox_price.addEventListener('change', function() {
-//   // If checkbox is checked, enable the filter
-//   if (checkbox_price.checked) {
-//     const filteredProducts = currentProducts.filter(product => product.price < 50);
-//     render(filteredProducts, currentPagination);
-//   } else {
-//     // If checkbox is unchecked, remove the filter
-//     render(currentProducts, currentPagination);
-//   }
-// });
+//INDICATORS 
+computeIndicators();
