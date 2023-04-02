@@ -1,9 +1,9 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./eshops/dedicatedbrand');
 
-async function sandbox (eshop = 'https://www.dedicatedbrand.com/en/men/news') {
+async function sandbox (eshop) {
   try {
-    console.log(`🕵️‍♀️  browsing ${eshop} eshop`);
+    //console.log(`🕵️‍♀️  browsing ${eshop} eshop`);
 
     const products = await dedicatedbrand.scrape(eshop);
 
