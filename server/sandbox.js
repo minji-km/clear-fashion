@@ -19,9 +19,7 @@ async function sandbox (eshop) {
     console.log('done circle');
 
     var products =  products_dedicated.concat(products_montlimart).concat(products_circle);
-    var all = {}
-    all.products = products
-    const json = JSON.stringify(all, null, 2);
+    const json = JSON.stringify(products, null, 2);
     fs.writeFile("list.json", json, 'utf8', function (err) {
       if (err) {
           console.log("ERROR!");
