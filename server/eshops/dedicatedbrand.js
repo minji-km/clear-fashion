@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-
 /**
  * Parse webpage e-shop
  * @param  {String} data - html response
@@ -8,7 +7,6 @@ const cheerio = require('cheerio');
  */
 const parse = data => {
   const $ = cheerio.load(data);
-
   return $('.productList-container .productList')
     .map((i, element) => {
       const name = $(element)
@@ -21,52 +19,32 @@ const parse = data => {
           .find('.productList-price')
           .text()
       );
+      const image = $(element)
+        .find('.productList-image')
+        .children('img')
+        .attr('data-src')
 
-      return {name, price};
+      const l = 'https://www.dedicatedbrand.com' + $(element)
+        .find('.productList-link')
+        .attr('href')
+
+      return {name, price, image, l};
     })
     .get();
 };
-
 /**
  * Scrape all the products for a given url page
  * @param  {[type]}  url
  * @return {Array|null}
  */
-module.exports.scrape = async (url='https://www.dedicatedbrand.com/en/loadfilter?category=men%2Fall-men') => {
+module.exports.scrape = async (url='https://www.dedicatedbrand.com/en/men/news') => {
   try {
     const response = await fetch(url);
-
     if (response.ok) {
-      const body = await response.json();
-      const filterId =[];
-      const filteredProducts =[];
-      const filter = [];
-
-      //We want to keep the ID of all the products that is the shown in the all-men
-      body.filter.categories['men/all-men'].forEach(element => {
-        filterId.push(element)
-      });
-
-      //We keep only the products that have their ID in the array we have previously created
-      body.products.forEach(element => {
-          if(filterId.includes(element.id)){
-            filteredProducts.push(element)
-          }
-      })
-
-      //We decide to only display the name and the price of the product
-      filteredProducts.forEach(element => {
-        temp={};
-        temp['name']=element.name;
-        temp['price']=element.price.price;
-        filter.push(temp)
-
-      })
-      return filter;
+      const body = await response.text();
+      return parse(body);
     }
-
     console.error(response);
-
     return null;
   } catch (error) {
     console.error(error);
