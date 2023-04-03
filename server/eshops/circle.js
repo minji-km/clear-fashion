@@ -39,7 +39,9 @@ const parse = data => {
         .attr('href')
 
   
-        return {name, price, image, l};
+        const brand = "Circlesportswear";
+
+        return {name, price, image, l, brand};
       })
       .get();
   };

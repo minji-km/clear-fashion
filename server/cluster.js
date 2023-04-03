@@ -13,4 +13,35 @@ async function connect(){
     client.close();
 }
 
-connect();
+async function filterByBrand(brand){
+    const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+    const db =  client.db(MONGODB_DB_NAME);
+    const list = db.collection('products');
+    const f = await list.find({brand}).toArray();
+    console.log(f);
+    client.close();
+}
+
+async function filterByPrice(lowerprice){
+    const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+    const db =  client.db(MONGODB_DB_NAME);
+    const list = db.collection('products');
+    const lowerthanprice = {price:{$lt: lowerprice}};
+    const f = await list.find(lowerthanprice).toArray();
+    console.log(f);
+    client.close();
+}
+
+async function sortByPrice(){
+    const client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+    const db =  client.db(MONGODB_DB_NAME);
+    const list = db.collection('products');
+    const f = await list.find({}).sort({price:1}).toArray();
+    console.log(f);
+    client.close();
+}
+
+//connect();
+filterByBrand('Dedicatedbrand');
+filterByPrice(50);
+sortByPrice();

@@ -28,7 +28,9 @@ const parse = data => {
         .find('.productList-link')
         .attr('href')
 
-      return {name, price, image, l};
+      
+      const brand = "Dedicatedbrand";
+      return {name, price, image, l, brand};
     })
     .get();
 };
